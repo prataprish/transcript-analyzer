@@ -18,6 +18,7 @@ import Script from 'src/app/core/models/script.model';
 export default class AnalyzerComponent implements OnInit, AfterViewInit {
     public agentControl: FormControl;
     public callControl: FormControl;
+    public currentOrderHover: number | null = null;
     public dataSource: any[] = [];
     public dataSourceRep: any[] = [];
     public matchingPercentageControl: FormControl;
@@ -65,14 +66,19 @@ export default class AnalyzerComponent implements OnInit, AfterViewInit {
         return null;
     }
 
-    public getTooltip (transcript: any, scripts: Script[]): string {
+    public getTooltip (transcript: any, scripts: Script[]): any {
         let tooltip = '';
+        let order = null;
         const matchingScript = scripts.findIndex((script) => script.sentence === transcript.matching_sentence);
         if (matchingScript !== -1) {
-            tooltip = `${transcript.similarity * 100}% matching with line ${scripts[matchingScript].order + 1} "${scripts[matchingScript].sentence}"`
+            tooltip = `${transcript.similarity * 100}% matching with line ${scripts[matchingScript].order + 1} "${scripts[matchingScript].sentence}"`;
+            order = scripts[matchingScript].order;
         }
 
-        return tooltip;
+        return {
+            tooltip,
+            order
+        };
     }
 
     public ngAfterViewInit(): void {

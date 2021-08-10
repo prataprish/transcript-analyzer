@@ -40,7 +40,9 @@
                     <td>{{ secondsToTime(transcript.timeFrom) }}</td>
                     <td>{{ getSpeaker(call, transcript.channel) }}</td>
                     <td [class.heighlight]="(transcript.similarity || 0) * 100 > matchingPercentageControl.value"
-                        [matTooltip]="getTooltip(transcript, call.script)">
+                        [matTooltip]="getTooltip(transcript, call.script).tooltip"
+                        (mouseover)="currentOrderHover = getTooltip(transcript, call.script).order"
+                        (mouseout)="currentOrderHover = null">
                         {{ transcript.sentence }}
                     </td>
                 </tr>
@@ -63,7 +65,7 @@
                 <tr *ngFor="let script of call.script">
                     <td>{{ script.order + 1 }}</td>
                     <td>Rep:</td>
-                    <td [class.heighlight]="script.similarity || 0 > 0">
+                    <td [class.heighlight]="script.similarity || 0 > 0" [class.extraheighlight]="currentOrderHover === script.order">
                         {{ script.sentence }}
                     </td>
                 </tr>
